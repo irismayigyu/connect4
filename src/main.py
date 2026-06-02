@@ -11,11 +11,9 @@ def init():
 '''
     pygame.init()
     pygame.display.set_caption("Connect 4")
-    screen = pygame.display.set_mode((700, 600))
+    screen = pygame.display.set_mode((664, 584))
     matrix = Matrix()
-
     game = Pelinäkymä(screen, matrix)
-
     game.run_loop()
 
 

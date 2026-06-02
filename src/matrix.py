@@ -29,41 +29,27 @@ class Matrix:
                      [0, 0, 0, 0, 0, 0, 0]]
         return self.grid
 
-    def print_board(self):
-        '''Komentorivi testausta varten, tulostaa pelilaudan ruudukkona terminaaliin'''
+    # def print_board(self):
+    #     '''Komentorivi testausta varten, tulostaa pelilaudan ruudukkona terminaaliin'''
 
-        print("\n  1 2 3 4 5 6 7")
+    #     print("\n  1 2 3 4 5 6 7")
 
-        for row in self.grid:
-            print("|", end="")
-            for cell in row:
-                if cell == 0:
-                    print(" .", end="")  # tyhjä ruutu
-                else:
-                    print(f" {cell}", end="")  # X tai O
-            print(" |")
-        print("-----------------\n")
+    #     for row in self.grid:
+    #         print("|", end="")
+    #         for cell in row:
+    #             if cell == 0:
+    #                 print(" .", end="")
+    #             else:
+    #                 print(f" {cell}", end="")
+    #         print(" |")
+    #     print("-----------------\n")
 
-    def turn(self, col):
-        ''''Asettaa pelaajan merkin pelaajan valitsemaan soluun ja sen jälkeen vaihtaa pelaajaa'''
-        # Komentoriviversio:
-
-        # try:
-        #     column = int(
-        #         input(f"Pelaaja {player}, valitse kolumni (1-7): ")) - 1
-        # except ValueError:
-        #     print("Syötä numero väliltä 1-7!")
-        #     return
-        # if column < 0 or column > 6:
-        #     print("Valitse kolumni 1-7 väliltä")
-        #     return
-        if col < 0 or col > 6:
-            return
+    def make_move(self, col, player):
         for row in range(5, -1, -1):
             if self.grid[row][col] == 0:
-                self.grid[row][col] = self.player
-                self.change_turns()
-                return
+                self.grid[row][col] = player
+                return True
+        return False
 
     def change_turns(self):
         '''Vaihtaa vuoroja'''
@@ -120,36 +106,3 @@ class Matrix:
                 return False
 
         return True
-
-
-# Komentorivitestaus:
-
-# while True:
-
-#     print("CONNECT FOUR")
-#     board.print_board()
-
-#     board.turn("O")
-
-#     if board.checker("O"):
-#         board.print_board()
-#         print("Pelaaja O voitti!")
-#         break
-
-#     if board.full():
-#         board.print_board()
-#         print("Tasapeli!")
-#         break
-
-#     board.print_board()
-
-#     board.turn("X")
-#     if board.checker("X"):
-#         board.print_board()
-#         print("Pelaaja X voitti!")
-#         break
-
-#     if board.full():
-#         board.print_board()
-#         print("Tasapeli!")
-#         break

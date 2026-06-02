@@ -1,4 +1,5 @@
 import pygame
+from ai import AI
 
 
 class Pelinäkymä:
@@ -9,21 +10,26 @@ class Pelinäkymä:
 
         Args:
         matrix: peliruudukko, Matrix-luokan olio
-        gap: väliruudukon ruutujen välissä
+        gap: ruudukon ruutujen välissä oleva väli
+        ai: AI-luokan olio
         '''
         self.matrix = matrix
+        self.ai = AI()
         self.font = pygame.font.SysFont("Comic Sans", 17)
         self.screen = screen
-        self.cell_size = 87
-        self.gap = 7
+        self.cell_size = 90
+        self.gap = 3
+        self.winner = None
 
     def run_loop(self):
+        '''Pelilooppi'''
+
         is_running = True
         while is_running:
             self.screen.fill((125, 158, 192))
             self.draw_cells()
             if self.matrix.game_over:
-                self.announce_winner(current_player)
+                self.announce_winner(self.winner)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -32,13 +38,27 @@ class Pelinäkymä:
                     x = event.pos[0]
                     col = x // 80
                     col = (x - 20) // (self.cell_size + self.gap)
-
                     if 0 <= col <= 6:
-                        current_player = self.matrix.player
-                        self.matrix.turn(col)
-                        if self.matrix.checker(current_player):
-                            self.matrix.game_over = True
-                            self.announce_winner(current_player)
+                        self.matrix.make_move(col, "X")
+                    if self.matrix.checker("X"):
+                        self.winner = "X"
+                        self.matrix.game_over = True
+                    else:
+                        self.matrix.change_turns()
+                        self.ai_turn()
+                    if self.matrix.full():
+                        self.winner = "Draw"
+                        self.matrix.game_over = True
+
+    def ai_turn(self):
+        ai_col = self.ai.best_move(self.matrix)
+        if ai_col is not None:
+            self.matrix.make_move(ai_col, "O")
+            if self.matrix.checker("O"):
+                self.winner = "O"
+                self.matrix.game_over = True
+            else:
+                self.matrix.change_turns()
 
     def announce_winner(self, player):
         winner_message = self.font.render(
@@ -48,13 +68,8 @@ class Pelinäkymä:
     def draw_cells(self):
         for row in range(6):
             for col in range(7):
-                x = col * (self.cell_size + self.gap) + 20
-                y = row * (self.cell_size + self.gap) + 20
-                # pygame.draw.rect(
-                #     self.screen,
-                #     (0, 0, 255),
-                #     (x, y, self.cell_size, self.cell_size)
-                # )
+                x = col * (self.cell_size + self.gap) + 10
+                y = row * (self.cell_size + self.gap) + 10
                 value = self.matrix.grid[row][col]
                 if value == "X":
                     color = (255, 0, 0)
@@ -62,10 +77,9 @@ class Pelinäkymä:
                     color = (255, 255, 0)
                 else:
                     color = (255, 255, 255)
-
                 pygame.draw.circle(
                     self.screen,
                     color,
                     (x + self.cell_size // 2, y + self.cell_size // 2),
-                    30
+                    35
                 )
