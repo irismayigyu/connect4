@@ -1,11 +1,11 @@
 import sys
 import pygame
-from matrix import Matrix
+from services.matrix import Matrix
 from ui.gameview import Pelinäkymä
 
 
 def init():
-    '''Funktio, joka kutsuu pelin alkua
+    '''Kutsuu pelin alkua
 
     Args:
 '''

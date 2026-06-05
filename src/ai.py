@@ -9,6 +9,8 @@ class AI:
         pass
 
     def possible_moves(self, board):
+        '''Luo listan mahdollisista liikkeistä, joita voidaan tehdä eli jos sarake ei ole vielä täynnä
+        tehostaakseen alpha-beta pruningia, sarakkeet ovat keskeltä reunoille'''
         moves = []
         for col in [3, 4, 2, 1, 5, 6, 0]:
             if board.grid[0][col] == 0:
@@ -16,7 +18,8 @@ class AI:
         return moves
 
     def evaluate(self, board, depth):
-        '''Arvioi Ai:lle suopuisia tilanteita, ohjaa pelaaman keskisarakkeessa'''
+        '''Arvioi Ai:lle suopuisia tilanteita, ohjaa pelaaman keskisarakkeessa ja yrittämään voittaa pelin mahdollisimman aikaisin
+        korkeampi positiivinen arvo on hyvä Ai:lle'''
         score = 0
         if board.checker("O"):
             return 1000 + depth
@@ -30,6 +33,7 @@ class AI:
         return score
 
     def game_ended(self, board):
+        '''Katsoo onko jompikumpi voittanut tai onko lauta täynnä'''
         return (
             board.checker("X")
             or board.checker("O")
@@ -37,9 +41,19 @@ class AI:
         )
 
     def minimax(self, board, depth, alpha, beta, maximizing):
+        '''mini-max algoritmi valitsee ai-lle optimaalisen siirron pelaajaa vastaan. 
+        Ai on maksimoiva pelaaja ja vastustaja on minimoiva. alpha-beta pruning 
+        "leikkaa" pois ne vaihtoehdot, joita ei kannata valita ollenkaan, mikä nopeuttaa algoritmia
+
+        board: matrix-luokan olio 
+        depth: miten pitkälle/syvälle simuloidaan eri pelisiirto vaihtoehtoja
+        alpha: paras tähän asti löytynyt arvo maksimoivalle pelaajalle
+        beta: paras tähän asti löytynyt arvo minimoivalle pelaajalle
+        maximizing: kertoo kumpi pelaaja pelaa'''
+
         if depth == 0 or self.game_ended(board):
             return self.evaluate(board, depth)
-        if maximizing:
+        if maximizing:  # ai:n vuoro
             best_score = -float("inf")
             for move in self.possible_moves(board):
                 new_board = copy.deepcopy(board)
@@ -50,7 +64,7 @@ class AI:
                 if beta <= alpha:
                     break
             return best_score
-        else:
+        else:  # toisen pelaajan vuoro
             best_score = float("inf")
             for move in self.possible_moves(board):
                 new_board = copy.deepcopy(board)
@@ -58,11 +72,12 @@ class AI:
                 score = self.minimax(new_board, depth-1, alpha, beta, True)
                 best_score = min(best_score, score)
                 beta = min(beta, best_score)
-                if beta <= alpha:
+                if beta <= alpha:  # muita vaihtoehtoja ei tarvii tutkia
                     break
             return best_score
 
     def best_move(self, board):
+        '''Tarkistaa parasta siirtoa käyttäen minimaxia ja palauttaa parhaan kolumnin siirtoa varten'''
         alpha = -float("inf")
         beta = float("inf")
         best_score = -float("inf")
