@@ -5,9 +5,7 @@ from ui.gameview import Pelinäkymä
 
 
 def init():
-    '''Kutsuu pelin alkua
-
-    Args:
+    '''alustaa ikkunan ja kutsuu pelilooppia
 '''
     pygame.init()
     pygame.display.set_caption("Connect 4")

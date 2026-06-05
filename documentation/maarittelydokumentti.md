@@ -6,7 +6,6 @@ Pelimerkit “tiputetaan” laudalle. Pelaaja pelaa fiksua tekoälyä vastaan. M
 
 Ydin: Minimax-algoritmi ja sen tehostaminen. 
 
-
 Ohjelmointikieli: Python
 
 Kielet, joita osaan: Python

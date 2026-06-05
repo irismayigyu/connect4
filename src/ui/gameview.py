@@ -27,7 +27,7 @@ class Pelinäkymä:
         is_running = True
         while is_running:
             self.screen.fill((125, 158, 192))
-            self.draw_cells()
+            self.draw_circles()
             if self.matrix.game_over:
                 self.announce_winner(self.winner)
             pygame.display.update()
@@ -65,7 +65,7 @@ class Pelinäkymä:
             f"{player} has won!", True, (0, 0, 0))
         self.screen.blit(winner_message, (34, 160))
 
-    def draw_cells(self):
+    def draw_circles(self):
         for row in range(6):
             for col in range(7):
                 x = col * (self.cell_size + self.gap) + 10

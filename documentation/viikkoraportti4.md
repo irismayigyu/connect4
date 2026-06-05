@@ -1,7 +1,7 @@
 
 ## Viikkoraportti 4
 
-Mitä olen tehnyt tällä viikolla? sain minimaxin toimimaan ja ai:n pelaamaan. tein alpa-beta pruningia
+Mitä olen tehnyt tällä viikolla? sain minimaxin toimimaan ja ai:n pelaamaan. tein alpa-beta pruningia. siirtojen järjestäminen
 
 Miten ohjelma on edistynyt? hyvin
 

@@ -52,7 +52,6 @@ class Matrix:
         return False
 
     def change_turns(self):
-        '''Vaihtaa vuoroja'''
         self.player = "O" if self.player == "X" else "X"
 
     def checker(self, player):
