@@ -14,7 +14,6 @@ class Matrix:
         _initialize_game(): funktio alustaa tyhjän matriisin
         '''
 
-        self.grid = [[0 for _ in range(7)] for _ in range(6)]
         self.player = "X"
         self.game_over = False
         self.game_won = False
@@ -82,6 +81,7 @@ class Matrix:
                     return True
 
     def diag_up_check(self, player):
+        "Vasemmalta ylöspäin menevä rivi"
         for row in range(3):
             for col in range(4):
                 if (self.grid[row][col] == player and
@@ -91,6 +91,7 @@ class Matrix:
                     return True
 
     def diag_down_check(self, player):
+        '''Vasemmalta alaspäin'''
         for row in range(3):
             for col in range(3, 7):
                 if (self.grid[row][col] == player and

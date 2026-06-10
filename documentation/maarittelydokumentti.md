@@ -1,6 +1,6 @@
 ## Harjoitustyön ydin:
 
-6 x 7 -kokoisella laudalla pelattava peli, jossa voittaa kun saa neljä omaa pelimerkkiä riviin. 
+6 x 7 -kokoisella laudalla pelattava peli, jossa voittaa kun saa neljä omaa pelimerkkiä peräkkäin vaakasuorassa, pystysuorassa tai diagonaalissa.
 
 Pelimerkit “tiputetaan” laudalle. Pelaaja pelaa fiksua tekoälyä vastaan. Minimax-algoritmin avulla tarkistetaan aina mikä on paras mahdollinen siirto ja valitaan se. Peliä tehostetaan alpha-beta-karsinnalla. Teen graafisen käyttöliittymän pygamella? Ominaisuuksia: siirtojen järjestäminen, iteratiivinen syveneminen. 
 
