@@ -13,6 +13,13 @@ pygame = "^2.6.1"
 
 
 
+[tool.poetry.group.dev.dependencies]
+invoke = "^3.0.3"
+coverage = "^7.14.1"
+pytest = "^9.0.3"
+pylint = "^4.0.5"
+autopep8 = "^2.3.2"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

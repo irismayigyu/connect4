@@ -56,7 +56,7 @@ class Matrix:
 
     def checker(self, player):
         '''Luokan metodi, joka tarkistaa voittiko joku'''
-        if self.row_check(player) or self.col_check(player) or self.slant_up_check(player) or self.slant_down_check(player):
+        if self.row_check(player) or self.col_check(player) or self.diag_up_check(player) or self.diag_down_check(player):
             return True
         else:
             return False
@@ -81,7 +81,7 @@ class Matrix:
 
                     return True
 
-    def slant_up_check(self, player):
+    def diag_up_check(self, player):
         for row in range(3):
             for col in range(4):
                 if (self.grid[row][col] == player and
@@ -90,7 +90,7 @@ class Matrix:
                         self.grid[row + 3][col + 3] == player):
                     return True
 
-    def slant_down_check(self, player):
+    def diag_down_check(self, player):
         for row in range(3):
             for col in range(3, 7):
                 if (self.grid[row][col] == player and
