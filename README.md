@@ -4,7 +4,7 @@ Connect four game tekoälyä vastaan
 
 ## Säännöt
 
-Tarkoitus on saada neljä peräkkäistä omaa nappulaa riviin joko pystysuoraan, vaakasuoraan tai diagonaalisti. Nappulat pudotetaan painamalla saraketta, johon haluat laittaa nappulan. Pelaaja on punainen ja tekoäly keltainen.
+Tarkoitus on saada neljä peräkkäistä omaa nappulaa riviin joko pystysuoraan, vaakasuoraan tai diagonaalisti. Nappulat pudotetaan painamalla jotain niistä ympyröistä, jotka ovat sarakkeessa, johon haluat laittaa nappulan. Pelaaja on punainen ja tekoäly keltainen.
 ## Python-versiovaatimus
 
 Python 3.10–3.12 vaadittu

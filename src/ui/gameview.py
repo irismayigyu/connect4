@@ -47,7 +47,7 @@ class Pelinäkymä:
                     if self.matrix.full():
                         self.winner = "Draw"
                         self.matrix.game_over = True
-                    else:
+                    if not self.matrix.game_over:
                         self.matrix.change_turns()
                         self.ai_turn()
 

@@ -44,7 +44,7 @@ class AI:
         for row in range(6):
             if board.grid[row][3] == "O":
                 center_points += 1
-        score += center_points * 9
+        score += center_points * 6
         score += self.three_in_a_row(board, "O") * 10
         score -= self.three_in_a_row(board, "X") * 12
         return score
