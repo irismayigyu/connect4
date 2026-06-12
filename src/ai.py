@@ -1,4 +1,5 @@
 import copy
+import time
 
 
 class AI:
@@ -10,10 +11,7 @@ class AI:
 
     def current_board_state(self, board):
         '''Tekee pelitilanteesta tuplen'''
-        rows = []
-        for row in board.grid:
-            rows.append(tuple(row))
-            return tuple(row)
+        return tuple(tuple(row) for row in board.grid)
 
     def possible_moves(self, board):
         '''Luo listan mahdollisista siirroista.
@@ -37,9 +35,11 @@ class AI:
         korkeampi positiivinen arvo on hyvä Ai:lle'''
         score = 0
         if board.checker("O"):
-            return 1000 + depth
+            return 10000 + depth
         if board.checker("X"):
-            return -1001 - depth
+            return -10000 - depth
+        if self.three_in_a_row(board, "X") >= 2:
+            return -5000
         center_points = 0
         for row in range(6):
             if board.grid[row][3] == "O":
@@ -86,7 +86,7 @@ class AI:
                     board.grid[row+1][col+1] == piece and
                         board.grid[row+2][col+2] == piece):
                     count += 1
-            return count
+        return count
 
     def three_diag_up(self, board, piece):
         count = 0
@@ -116,7 +116,7 @@ class AI:
         alpha: paras tähän asti löytynyt arvo maksimoivalle pelaajalle
         beta: paras tähän asti löytynyt arvo minimoivalle pelaajalle
         maximizing: kertoo kumpi pelaaja pelaa'''
-
+        self.nodes += 1
         if depth == 0 or self.game_ended(board):
             return self.evaluate(board, depth)
 
@@ -164,12 +164,19 @@ class AI:
         Palauttaa parhaan syvimmän siirron'''
         self.best_moves = {}
         self.calculated_scores = {}
+        start = time.time()
+        self.nodes = 0
         best_col = None
-        max_depth = 7
+        max_depth = 6
         for depth in range(1, max_depth + 1):
             move = self.best_move_at_depth(board, depth)
             if move is not None:
                 best_col = move
+            print(
+                f"Depth {depth}: "
+                f"{self.nodes} nodes, "
+                f"{time.time() - start:.3f}s"
+            )
         return best_col
 
     def best_move_at_depth(self, board, depth):

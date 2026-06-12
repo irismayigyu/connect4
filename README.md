@@ -17,7 +17,7 @@ Python 3.10–3.12 vaadittu
 
 [Viikkoraportti 4](https://github.com/irismayigyu/connect4/blob/main/documentation/viikkoraportti4.md)
 
-
+[Viikkoraportti 5](https://github.com/irismayigyu/connect4/blob/main/documentation/viikkoraportti5.md)
 ## Käyttöohjeet
 
 1. Kloonaa repositorio

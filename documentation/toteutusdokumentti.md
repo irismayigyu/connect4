@@ -1,32 +1,35 @@
 
 ## Ohjelman yleisrakenne
 
+- UI-kansiossa on pelinäkymä (gameview.py), jossa piirretään pelinäkymä pygamessa. Käyttää Matrix (peliruudukko) ja Ai luokkien olioita
 
-<span style="color:grey">
-tähän jossain välissä sekvenssiakaavio tms rakenteesta
-</span>
+- Ai.py on tekoälystä vastaava tiedosto.
 
+- Main.py suorittaa pelilooppia.
 
-UI-kansiossa on pelinäkymä (gameview.py), jossa piirretään pelinäkymä pygamessa.käyttää Matrix (peliruudukko) ja Ai luokkion olioita
+- Services-kansion matrix.py sisältää toimintalogiikan.
 
-Ai.py on tekoälystä vastaava tiedosto
+### Aika- ja tilavaativuudet
 
-Main.py suorittaa pelilooppia
+- Aikavaativuus: O(n^m), jossa n: mahdollisten siirtojen määrä ja m: kuinka monta siirtoa eteenpäin lasketaan (syvyys). 
 
-Services-kansion Matrix.py sisältää toimintalogiikan
+- Tilavaativuus: O(nm), jossa n: mahdollisten siirtojen määrä ja m: kuinka monta siirtoa eteenpäin lasketaan (syvyys). 
 
-### Saavutetut aika- ja tilavaativuudet (esim. O-analyysit pseudokoodista)
+Pelissä käytetään maksimisyvyyttä 6. Korkeammilla syvyyksillä peli alkaa hidastua huomattavasti.
 
-### Suorituskyky- ja O-analyysivertailu (mikäli sopii työn aiheeseen)
+### Jatkokehitysideoita
 
-### Työn mahdolliset puutteet ja parannusehdotukset
+- UI:n parantelu esim ohjeet screenille eikä vaan READ.MEhen. 
 
+- Tekoälyn tehokkuuden parantelu niin, että syvyyttä voisi lisätä.
 
-### Laajojen kielimallien (ChatGPT yms.) käyttö:
+### Laajojen kielimallien käyttö:
 
-Käytetty debuggaukseen, Chat-gpt 5.5
+Käytetty debuggaukseen, Chat-GPT 5.5.
 
 ### Lähteet, joita olet käyttänyt: 
 
-Video: Algorithms Explained – minimax and alpha-beta pruning 
+- Video: Sebastian Lague, 2018: Algorithms Explained – minimax and alpha-beta pruning 
 https://www.youtube.com/watch?v=l-hh51ncgDI 
+
+- Tiralabran kurssimateriaali

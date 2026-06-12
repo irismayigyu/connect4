@@ -12,7 +12,7 @@ Kielet, joita osaan: Python
 
 Mitä algoritmeja ja tietorakenteita toteutat työssäsi? minimax, alfa-beta karsinta, pelitilannetta voi kuvata matriisitaulukolla
 
-Mitä syötteitä ohjelma saa ja miten niitä käytetään? pelaajien siirtoja
+Mitä syötteitä ohjelma saa ja miten niitä käytetään? pelaajan siirtoja
 
 Tavoitteena olevat aika- ja tilavaativuudet: O(n^m) jossa n=mahdollisten siirtojen määrä ja m=kuinka monta siirtoa eteenpäin lasketaan (syvyys). Tilavaativuus: O(nm)
 

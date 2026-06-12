@@ -1,6 +1,6 @@
 import unittest
-from src.services.matrix import Matrix
-from src.ai import AI
+from services.matrix import Matrix
+from ai import AI
 
 
 class TestAI(unittest.TestCase):
