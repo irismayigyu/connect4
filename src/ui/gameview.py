@@ -36,22 +36,24 @@ class Pelinäkymä:
                     is_running = False
                 if event.type == pygame.MOUSEBUTTONDOWN and not self.matrix.game_over:
                     x = event.pos[0]
-                    col = x // 80
                     col = (x - 20) // (self.cell_size + self.gap)
                     if 0 <= col <= 6:
                         self.matrix.make_move(col, "X")
                     if self.matrix.checker("X"):
                         self.winner = "X"
                         self.matrix.game_over = True
-
+                        continue
                     if self.matrix.full():
                         self.winner = "Draw"
                         self.matrix.game_over = True
+                        continue
                     if not self.matrix.game_over:
                         self.matrix.change_turns()
                         self.ai_turn()
 
     def ai_turn(self):
+        if self.matrix.game_over:
+            return
         ai_col = self.ai.best_move(self.matrix)
         if ai_col is not None:
             self.matrix.make_move(ai_col, "O")
@@ -62,8 +64,12 @@ class Pelinäkymä:
                 self.matrix.change_turns()
 
     def announce_winner(self, player):
-        winner_message = self.font.render(
-            f"{player} has won!", True, (0, 0, 0))
+        if self.winner == "Draw":
+            winner_message = self.font.render(
+                f"Draw!", True, (0, 0, 0))
+        else:
+            winner_message = self.font.render(
+                f"{player} has won!", True, (0, 0, 0))
         self.screen.blit(winner_message, (34, 160))
 
     def draw_circles(self):

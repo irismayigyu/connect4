@@ -35,18 +35,18 @@ class AI:
         korkeampi positiivinen arvo on hyvä Ai:lle'''
         score = 0
         if board.checker("O"):
-            return 10000 + depth
+            return 1000 + depth
         if board.checker("X"):
-            return -10000 - depth
+            return -1000 - depth
         if self.three_in_a_row(board, "X") >= 2:
-            return -5000
+            return -500
         center_points = 0
         for row in range(6):
             if board.grid[row][3] == "O":
                 center_points += 1
-        score += center_points * 6
-        score += self.three_in_a_row(board, "O") * 10
-        score -= self.three_in_a_row(board, "X") * 12
+        score += center_points * 5
+        score += self.three_in_a_row(board, "O") * 15
+        score -= self.three_in_a_row(board, "X") * 15
         return score
 
     def three_in_a_row(self, board, piece):
