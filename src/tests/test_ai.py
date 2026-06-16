@@ -92,3 +92,46 @@ class TestAI(unittest.TestCase):
                             [0, 0, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0]]
         self.assertEqual(self.ai.best_move(self.matrix), 3)
+
+    def test_make_move_and_best_move_block(self):
+        self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0]]
+        self.matrix.make_move(0, "X")
+        self.matrix.make_move(0, "X")
+        self.matrix.make_move(0, "X")
+        move = self.ai.best_move(self.matrix)
+        self.assertEqual(move, 0)
+
+    def test_make_move_and_best_move_win(self):
+        self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0]]
+        self.matrix.make_move(0, "O")
+        self.matrix.make_move(0, "O")
+        self.matrix.make_move(0, "O")
+        move = self.ai.best_move(self.matrix)
+        self.assertEqual(move, 0)
+
+    def test_player_and_ai_turn(self):
+        self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0]]
+        self.matrix.make_move(3, "X")
+        ai_move = self.ai.best_move(self.matrix)
+        self.matrix.make_move(ai_move, "O")
+        moves = sum(
+            cell != 0
+            for row in self.matrix.grid
+            for cell in row
+        )
+        self.assertEqual(moves, 2)
