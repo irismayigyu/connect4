@@ -1,7 +1,7 @@
 import sys
 import pygame
 from services.matrix import Matrix
-from ui.gameview import Pelinäkymä
+from ui.gameview import Gameview
 
 
 def init():
@@ -11,7 +11,7 @@ def init():
     pygame.display.set_caption("Connect 4")
     screen = pygame.display.set_mode((664, 584))
     matrix = Matrix()
-    game = Pelinäkymä(screen, matrix)
+    game = Gameview(screen, matrix)
     game.run_loop()
 
 

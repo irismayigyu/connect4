@@ -1,9 +1,10 @@
 import unittest
-from ai import AI
 from services.matrix import Matrix
 
 
 class TestMatrix(unittest.TestCase):
+    '''Testiluokka matrixille ja sovelluslogiikalle'''
+
     def setUp(self):
         self.matrix = Matrix()
 

@@ -1,3 +1,4 @@
+'''Sisältää pelin logiikan ja Matrix-luokan'''
 
 
 class Matrix:
@@ -11,15 +12,15 @@ class Matrix:
     def __init__(self):
         '''Luokan konstruktori, joka alustaa ruudukon
 
-        _initialize_game(): funktio alustaa tyhjän matriisin
+        initialize_game(): funktio alustaa tyhjän matriisin
         '''
 
         self.player = "X"
         self.game_over = False
         self.game_won = False
-        self._initialize_game()
+        self.initialize_game()
 
-    def _initialize_game(self):
+    def initialize_game(self):
         self.grid = [[0, 0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0, 0],
@@ -55,10 +56,14 @@ class Matrix:
 
     def checker(self, player):
         '''Luokan metodi, joka tarkistaa voittiko joku'''
-        if self.row_check(player) or self.col_check(player) or self.diag_up_check(player) or self.diag_down_check(player):
+        if (
+            self.row_check(player)
+            or self.col_check(player)
+            or self.diag_up_check(player)
+            or self.diag_down_check(player)
+        ):
             return True
-        else:
-            return False
+        return False
 
     def row_check(self, player):
         for row in range(6):
@@ -68,6 +73,7 @@ class Matrix:
                     self.grid[row][col + 2] == player and
                         self.grid[row][col + 3] == player):
                     return True
+        return None
 
     def col_check(self, player):
         for row in range(3):
@@ -79,6 +85,7 @@ class Matrix:
                         self.grid[row + 3][col] == player):
 
                     return True
+        return None
 
     def diag_up_check(self, player):
         "Vasemmalta ylöspäin menevä rivi"
@@ -89,6 +96,7 @@ class Matrix:
                     self.grid[row + 2][col + 2] == player and
                         self.grid[row + 3][col + 3] == player):
                     return True
+        return None
 
     def diag_down_check(self, player):
         '''Vasemmalta alaspäin'''
@@ -99,6 +107,8 @@ class Matrix:
                     self.grid[row + 2][col - 2] == player and
                         self.grid[row + 3][col - 3] == player):
                     return True
+
+        return None
 
     def full(self):
         for row in self.grid:

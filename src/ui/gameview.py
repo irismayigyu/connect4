@@ -2,7 +2,7 @@ import pygame
 from ai import AI
 
 
-class Pelinäkymä:
+class Gameview:
     '''Luokka, jolla piirretään pelinäkymä'''
 
     def __init__(self, screen, matrix):
@@ -38,18 +38,18 @@ class Pelinäkymä:
                     x = event.pos[0]
                     col = (x - 20) // (self.cell_size + self.gap)
                     if 0 <= col <= 6:
-                        self.matrix.make_move(col, "X")
-                    if self.matrix.checker("X"):
-                        self.winner = "X"
-                        self.matrix.game_over = True
-                        continue
-                    if self.matrix.full():
-                        self.winner = "Draw"
-                        self.matrix.game_over = True
-                        continue
-                    if not self.matrix.game_over:
-                        self.matrix.change_turns()
-                        self.ai_turn()
+                        if self.matrix.make_move(col, "X"):
+                            if self.matrix.checker("X"):
+                                self.winner = "X"
+                                self.matrix.game_over = True
+                                continue
+                            if self.matrix.full():
+                                self.winner = "Draw"
+                                self.matrix.game_over = True
+                                continue
+                            if not self.matrix.game_over:
+                                self.matrix.change_turns()
+                                self.ai_turn()
 
     def ai_turn(self):
         if self.matrix.game_over:
@@ -60,13 +60,16 @@ class Pelinäkymä:
             if self.matrix.checker("O"):
                 self.winner = "O"
                 self.matrix.game_over = True
+            elif self.matrix.full():
+                self.winner = "Draw"
+                self.matrix.game_over = True
             else:
                 self.matrix.change_turns()
 
     def announce_winner(self, player):
         if self.winner == "Draw":
             winner_message = self.font.render(
-                f"Draw!", True, (0, 0, 0))
+                "Draw!", True, (0, 0, 0))
         else:
             winner_message = self.font.render(
                 f"{player} has won!", True, (0, 0, 0))
