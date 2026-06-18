@@ -7,7 +7,6 @@ class AI:
 
     def __init__(self):
         self.best_moves = {}
-        #self.calculated_scores = {}
         self.nodes = 0
 
     def current_board_state(self, board):
@@ -101,34 +100,71 @@ class AI:
             or board.full()
         )
 
-    def minimax(self, board, depth, alpha, beta, maximizing):
-        '''Valitsee AI-lle optimaalisen siirron pelaajaa vastaan. 
-        AI on maksimoiva pelaaja ja vastustaja on minimoiva. 
-        Alpha-beta pruning "leikkaa" pois ne vaihtoehdot, 
+    def best_move(self, board):
+        '''Kutsuu minimaxia iteratiivisesti niin syvälle kun kerkeää 
+        kunnes tulee aikakatkaisu ja palauttaa siihen asti saadun parhaan siirron'''
+        best_col = None
+        start_time = time.time()
+        time_limit = 1
+        depth = 1
+        while True:
+            if time.time() - start_time > time_limit:
+                break
+            try:
+                score, move = self.minimax(
+                    board,
+                    depth,
+                    -float("inf"),
+                    float("inf"),
+                    True,
+                    start_time,
+                    time_limit
+                )
+                if move is not None:
+                    best_col = move
+            except TimeoutError:
+                break
+            depth += 1
+        return best_col
+
+    def minimax(self, board, depth, alpha, beta, maximizing, start_time, time_limit):
+        '''Valitsee AI-lle optimaalisen siirron pelaajaa vastaan.
+        AI on maksimoiva pelaaja ja vastustaja on minimoiva.
+        Alpha-beta pruning "leikkaa" pois ne vaihtoehdot,
         joita ei kannata valita ollenkaan, mikä nopeuttaa algoritmia.
 
-        board: matrix-luokan olio 
+        board: matrix-luokan olio
         depth: miten pitkälle/syvälle simuloidaan eri pelisiirtovaihtoehtoja
         alpha: paras tähän asti löytynyt arvo maksimoivalle pelaajalle
         beta: paras tähän asti löytynyt arvo minimoivalle pelaajalle
         maximizing: kertoo kumpi pelaaja pelaa'''
-        self.nodes += 1
-        if self.game_ended:
-            return 
-        if depth == 0 
-            return self.evaluate(board, depth)
-
+        if time.time() - start_time > time_limit:
+            raise TimeoutError
+        if board.checker("O"):
+            return 1000 + depth, None
+        if board.checker("X"):
+            return -1000 - depth, None
+        if board.full():
+            return 0, None
+        if depth == 0:
+            return self.evaluate(board, depth), None
         state = self.current_board_state(board)
-        #key = (state, depth, maximizing)
-        #if key in self.calculated_scores:
-            #return self.calculated_scores[key]
+
         if maximizing:
             best_score = -float("inf")
             best_move = None
             for move in self.possible_moves(board):
                 new_board = copy.deepcopy(board)
                 new_board.make_move(move, "O")
-                score = self.minimax(new_board, depth-1, alpha, beta, False)
+                score, _ = self.minimax(
+                    new_board,
+                    depth - 1,
+                    alpha,
+                    beta,
+                    False,
+                    start_time,
+                    time_limit
+                )
                 if score > best_score:
                     best_score = score
                     best_move = move
@@ -136,63 +172,27 @@ class AI:
                 if beta <= alpha:
                     break
             self.best_moves[state] = best_move
-            #self.calculated_scores[key] = best_score
-            return best_score
+            return best_score, best_move
 
         best_score = float("inf")
         best_move = None
         for move in self.possible_moves(board):
             new_board = copy.deepcopy(board)
             new_board.make_move(move, "X")
-            score = self.minimax(new_board, depth-1, alpha, beta, True)
+            score, _ = self.minimax(
+                new_board,
+                depth - 1,
+                alpha,
+                beta,
+                True,
+                start_time,
+                time_limit
+            )
             if score < best_score:
                 best_score = score
                 best_move = move
                 beta = min(beta, best_score)
             if beta <= alpha:
                 break
-        if best_move is not None:
-            self.best_moves[state] = best_move
-        #self.calculated_scores[key] = best_score
-        return best_score #laita palauttaa siirto eikä score
-
-    def best_move(self, board): #tee aikakatkasu ja yhdistä best_move_at_depthiin
-        '''Kutsuu best_move_at_depth -metodia eri syvyyksillä iteratiivisesti.
-        Palauttaa parhaan syvimmän siirron'''
-        self.best_moves = {}
-        #self.calculated_scores = {}
-        start = time.time()
-        best_col = None
-        max_depth = 6
-        for depth in range(1, max_depth + 1):
-            move = self.best_move_at_depth(board, depth)
-            best_col = move
-            print(
-                f"Depth {depth}: "
-                f"{self.nodes} nodes, "
-                f"{time.time() - start:.3f}s"
-            )
-        return best_col
-
-    def best_move_at_depth(self, board, depth): #poista
-        '''Etsii parhaan siirron annetulla syvyydellä.
-        Käyttää minimaxia simulointiin.
-        Palauttaa parhaan siirron sille syvyydelle'''
-        alpha = -float("inf")
-        beta = float("inf")
-        best_score = -float("inf")
-        best_col = None
-        for move in self.possible_moves(board):
-            new_board = copy.deepcopy(board)
-            new_board.make_move(move, "O")
-            score = self.minimax(
-                new_board,
-                depth-1, #poista -1 sit
-                alpha,
-                beta,
-                False
-            )
-            if score > best_score:
-                best_score = score
-                best_col = move
-        return best_col
+        self.best_moves[state] = best_move
+        return best_score, best_move

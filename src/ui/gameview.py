@@ -55,16 +55,15 @@ class Gameview:
         if self.matrix.game_over:
             return
         ai_col = self.ai.best_move(self.matrix)
-        if ai_col is not None:
-            self.matrix.make_move(ai_col, "O")
-            if self.matrix.checker("O"):
-                self.winner = "O"
-                self.matrix.game_over = True
-            elif self.matrix.full():
-                self.winner = "Draw"
-                self.matrix.game_over = True
-            else:
-                self.matrix.change_turns()
+        self.matrix.make_move(ai_col, "O")
+        if self.matrix.checker("O"):
+            self.winner = "O"
+            self.matrix.game_over = True
+        elif self.matrix.full():
+            self.winner = "Draw"
+            self.matrix.game_over = True
+        else:
+            self.matrix.change_turns()
 
     def announce_winner(self, player):
         if self.winner == "Draw":
