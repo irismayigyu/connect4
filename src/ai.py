@@ -7,7 +7,7 @@ class AI:
 
     def __init__(self):
         self.best_moves = {}
-        self.calculated_scores = {}
+        #self.calculated_scores = {}
         self.nodes = 0
 
     def current_board_state(self, board):
@@ -40,13 +40,6 @@ class AI:
             return 1000 + depth
         if board.checker("X"):
             return -1000 - depth
-        if self.three_in_a_row(board, "X") >= 2:
-            return -500
-        center_points = 0
-        for row in range(6):
-            if board.grid[row][3] == "O":
-                center_points += 1
-        score += center_points * 5
         score += self.three_in_a_row(board, "O") * 15
         score -= self.three_in_a_row(board, "X") * 15
         return score
@@ -120,13 +113,15 @@ class AI:
         beta: paras tähän asti löytynyt arvo minimoivalle pelaajalle
         maximizing: kertoo kumpi pelaaja pelaa'''
         self.nodes += 1
-        if depth == 0 or self.game_ended(board):
+        if self.game_ended:
+            return 
+        if depth == 0 
             return self.evaluate(board, depth)
 
         state = self.current_board_state(board)
-        key = (state, depth, maximizing)
-        if key in self.calculated_scores:
-            return self.calculated_scores[key]
+        #key = (state, depth, maximizing)
+        #if key in self.calculated_scores:
+            #return self.calculated_scores[key]
         if maximizing:
             best_score = -float("inf")
             best_move = None
@@ -137,12 +132,11 @@ class AI:
                 if score > best_score:
                     best_score = score
                     best_move = move
-                alpha = max(alpha, best_score)
+                    alpha = max(alpha, best_score)
                 if beta <= alpha:
                     break
-            if best_move is not None:
-                self.best_moves[state] = best_move
-            self.calculated_scores[key] = best_score
+            self.best_moves[state] = best_move
+            #self.calculated_scores[key] = best_score
             return best_score
 
         best_score = float("inf")
@@ -154,26 +148,25 @@ class AI:
             if score < best_score:
                 best_score = score
                 best_move = move
-            beta = min(beta, best_score)
+                beta = min(beta, best_score)
             if beta <= alpha:
                 break
         if best_move is not None:
             self.best_moves[state] = best_move
-        self.calculated_scores[key] = best_score
-        return best_score
+        #self.calculated_scores[key] = best_score
+        return best_score #laita palauttaa siirto eikä score
 
-    def best_move(self, board):
+    def best_move(self, board): #tee aikakatkasu ja yhdistä best_move_at_depthiin
         '''Kutsuu best_move_at_depth -metodia eri syvyyksillä iteratiivisesti.
         Palauttaa parhaan syvimmän siirron'''
         self.best_moves = {}
-        self.calculated_scores = {}
+        #self.calculated_scores = {}
         start = time.time()
         best_col = None
         max_depth = 6
         for depth in range(1, max_depth + 1):
             move = self.best_move_at_depth(board, depth)
-            if move is not None:
-                best_col = move
+            best_col = move
             print(
                 f"Depth {depth}: "
                 f"{self.nodes} nodes, "
@@ -181,7 +174,7 @@ class AI:
             )
         return best_col
 
-    def best_move_at_depth(self, board, depth):
+    def best_move_at_depth(self, board, depth): #poista
         '''Etsii parhaan siirron annetulla syvyydellä.
         Käyttää minimaxia simulointiin.
         Palauttaa parhaan siirron sille syvyydelle'''
@@ -194,7 +187,7 @@ class AI:
             new_board.make_move(move, "O")
             score = self.minimax(
                 new_board,
-                depth-1,
+                depth-1, #poista -1 sit
                 alpha,
                 beta,
                 False
