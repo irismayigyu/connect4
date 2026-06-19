@@ -16,7 +16,7 @@ class TestMatrix(unittest.TestCase):
                             [0, 0, 0, 0, 0, 0, 0],
                             [0, 0, 0, "X", "X", "X", "X"]]
         self.matrix.player = "X"
-        self.assertEqual(self.matrix.checker("X"), True)
+        self.assertEqual(self.matrix.checker(5, 4, "X"), True)
 
     def test_if__winning_checker_works_column(self):
         self.matrix.player = "X"
@@ -26,7 +26,7 @@ class TestMatrix(unittest.TestCase):
                             [0, 0, 0, 0, 0, 0, "X"],
                             [0, 0, 0, 0, 0, 0, "X"],
                             [0, 0, 0, 0, 0, 0, "X"]]
-        self.assertEqual(self.matrix.checker("X"), True)
+        self.assertEqual(self.matrix.checker(2, 6, "X"), True)
 
     def test_if__winning_checker_works_diag_up(self):
         self.matrix.player = "X"
@@ -36,17 +36,17 @@ class TestMatrix(unittest.TestCase):
                             [0, 0, 0, 0, 0, "X", 0],
                             [0, 0, 0, 0, "X", 0, 0],
                             [0, 0, 0, "X", 0, 0, 0]]
-        self.assertEqual(self.matrix.checker("X"), True)
+        self.assertEqual(self.matrix.checker(5, 3, "X"), True)
 
     def test_if__winning_checker_works_diag_down(self):
         self.matrix.player = "X"
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, "X", 0, 0, "O"],
-                            [0, 0, 0, 0, "X", 0, "O"],
+                            [0, 0, 0, "X", 0, 0, 0],
+                            [0, 0, 0, 0, "X", 0, 0],
                             [0, 0, 0, 0, 0, "X", 0],
                             [0, 0, 0, 0, 0, 0, "X"]]
-        self.assertEqual(self.matrix.checker("X"), True)
+        self.assertEqual(self.matrix.checker(5, 6, "X"), True)
 
     def test_if_correct_player_wins(self):
         self.matrix.player = "O"
@@ -55,8 +55,8 @@ class TestMatrix(unittest.TestCase):
                             [0, 0, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, "X", "X", "X", "X"]]
-        self.assertEqual(self.matrix.checker("O"), False)
+                            ["O", 0, 0, "X", "X", "X", "X"]]
+        self.assertEqual(self.matrix.checker(5, 0, "O"), False)
 
     def test_full_checker(self):
         self.matrix.grid = [["X", "X", "X", "X", "X", "X", "X"],
@@ -105,7 +105,7 @@ class TestMatrix(unittest.TestCase):
                                             ["X", "X", "X", "X", "X", "X", "X"],
                                             ["X", "X", "X", "X", "X", "X", "X"],
                                             ["X", "X", "X", "X", "X", "X", "X"]])
-        self.assertEqual(self.matrix.make_move(5, "O"), False)
+        self.assertEqual(self.matrix.make_move(5, "O"), None)
 
     def test_change_players(self):
         self.matrix.player = "O"

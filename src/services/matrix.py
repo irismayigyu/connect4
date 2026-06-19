@@ -29,86 +29,92 @@ class Matrix:
                      [0, 0, 0, 0, 0, 0, 0]]
         return self.grid
 
-    # def print_board(self):
-    #     '''Komentorivi testausta varten, tulostaa pelilaudan ruudukkona terminaaliin'''
-
-    #     print("\n  1 2 3 4 5 6 7")
-
-    #     for row in self.grid:
-    #         print("|", end="")
-    #         for cell in row:
-    #             if cell == 0:
-    #                 print(" .", end="")
-    #             else:
-    #                 print(f" {cell}", end="")
-    #         print(" |")
-    #     print("-----------------\n")
-
     def make_move(self, col, player):
         for row in range(5, -1, -1):
             if self.grid[row][col] == 0:
                 self.grid[row][col] = player
-                return True
-        return False
+                return row, col
+        return None
 
     def change_turns(self):
         self.player = "O" if self.player == "X" else "X"
 
-    def checker(self, player):
-        '''Luokan metodi, joka tarkistaa voittiko joku'''
+    def checker(self, row, col, player):
+        '''Luokan metodi, joka tarkistaa voittiko joku viimeisimmän siirron perusteella'''
         if (
-            self.row_check(player)
-            or self.col_check(player)
-            or self.diag_up_check(player)
-            or self.diag_down_check(player)
+            self.row_check(row, col, player)
+            or self.col_check(row, col, player)
+            or self.diag_up_check(row, col, player)
+            or self.diag_down_check(row, col, player)
         ):
             return True
         return False
 
-    def row_check(self, player):
-        for row in range(6):
-            for col in range(4):
-                if (self.grid[row][col] == player and
-                    self.grid[row][col + 1] == player and
-                    self.grid[row][col + 2] == player and
-                        self.grid[row][col + 3] == player):
-                    return True
-        return None
+    def row_check(self, row, col, player):
+        '''Tarkistaa onko voittorivejä viimeisimmän nappulan vasemmalta (prev) 
+        ja oikealta puolelta (next).
+        Jos löytyyy neljä peräkkäistä palauttaa True'''
+        count = 1
+        prev_col = col - 1
+        while prev_col >= 0 and self.grid[row][prev_col] == player:
+            count += 1
+            prev_col -= 1
 
-    def col_check(self, player):
-        for row in range(3):
-            for col in range(7):
+        next_col = col + 1
+        while next_col < 7 and self.grid[row][next_col] == player:
+            count += 1
+            next_col += 1
+        if count >= 4:
+            return True
+        return False
 
-                if (self.grid[row][col] == player and
-                    self.grid[row + 1][col] == player and
-                    self.grid[row + 2][col] == player and
-                        self.grid[row + 3][col] == player):
+    def col_check(self, row, col, player):
+        '''Tarkistaa että onko viimeinen siirto tehnyt voiton tarkistamalla nappulan alhaalla
+        olevia nappuloita'''
+        count = 1
+        next_row = row + 1
+        while next_row < 6 and self.grid[next_row][col] == player:
+            count += 1
+            next_row += 1
+        if count >= 4:
+            return True
+        return False
 
-                    return True
-        return None
+    def diag_up_check(self, row, col, player):
+        '''Vasemmalta ylöspäin menevä rivi'''
+        count = 1
+        next_row, next_col = row + 1, col - 1
+        while next_row < 6 and next_col >= 0 and self.grid[next_row][next_col] == player:
+            count += 1
+            next_row += 1
+            next_col -= 1
 
-    def diag_up_check(self, player):
-        "Vasemmalta ylöspäin menevä rivi"
-        for row in range(3):
-            for col in range(4):
-                if (self.grid[row][col] == player and
-                    self.grid[row + 1][col + 1] == player and
-                    self.grid[row + 2][col + 2] == player and
-                        self.grid[row + 3][col + 3] == player):
-                    return True
-        return None
+        next_row, next_col = row - 1, col + 1
+        while next_row >= 0 and next_col < 7 and self.grid[next_row][next_col] == player:
+            count += 1
+            next_row -= 1
+            next_col += 1
+        if count >= 4:
+            return True
+        return False
 
-    def diag_down_check(self, player):
+    def diag_down_check(self, row, col, player):
         '''Vasemmalta alaspäin'''
-        for row in range(3):
-            for col in range(3, 7):
-                if (self.grid[row][col] == player and
-                    self.grid[row + 1][col - 1] == player and
-                    self.grid[row + 2][col - 2] == player and
-                        self.grid[row + 3][col - 3] == player):
-                    return True
+        count = 1
+        next_row, next_col = row - 1, col - 1
+        while next_row >= 0 and next_col >= 0 and self.grid[next_row][next_col] == player:
+            count += 1
+            next_row -= 1
+            next_col -= 1
 
-        return None
+        next_row, next_col = row + 1, col + 1
+        while next_row < 6 and next_col < 7 and self.grid[next_row][next_col] == player:
+            count += 1
+            next_row += 1
+            next_col += 1
+        if count >= 4:
+            return True
+        return False
 
     def full(self):
         for row in self.grid:

@@ -38,25 +38,26 @@ class Gameview:
                     x = event.pos[0]
                     col = (x - 20) // (self.cell_size + self.gap)
                     if 0 <= col <= 6:
-                        if self.matrix.make_move(col, "X"):
-                            if self.matrix.checker("X"):
-                                self.winner = "X"
-                                self.matrix.game_over = True
-                                continue
-                            if self.matrix.full():
-                                self.winner = "Draw"
-                                self.matrix.game_over = True
-                                continue
-                            if not self.matrix.game_over:
-                                self.matrix.change_turns()
-                                self.ai_turn()
+                        # if self.matrix.make_move(col, "X"):
+                        row, col = self.matrix.make_move(col, "X")
+                        if self.matrix.checker(row, col, "X"):
+                            self.winner = "X"
+                            self.matrix.game_over = True
+                            continue
+                        if self.matrix.full():
+                            self.winner = "Draw"
+                            self.matrix.game_over = True
+                            continue
+                        if not self.matrix.game_over:
+                            self.matrix.change_turns()
+                            self.ai_turn()
 
     def ai_turn(self):
         if self.matrix.game_over:
             return
         ai_col = self.ai.best_move(self.matrix)
-        self.matrix.make_move(ai_col, "O")
-        if self.matrix.checker("O"):
+        row, col = self.matrix.make_move(ai_col, "O")
+        if self.matrix.checker(row, col, "O"):
             self.winner = "O"
             self.matrix.game_over = True
         elif self.matrix.full():

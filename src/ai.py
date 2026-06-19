@@ -7,7 +7,6 @@ class AI:
 
     def __init__(self):
         self.best_moves = {}
-        self.nodes = 0
 
     def current_board_state(self, board):
         '''Tekee pelitilanteesta tuplen'''
@@ -30,15 +29,10 @@ class AI:
                 moves.insert(0, best)
         return moves
 
-    def evaluate(self, board, depth):
-        '''Arvioi suopuisia tilanteita, ohjaa pelaaman keskisarakkeessa
-        ja yrittämään voittaa pelin mahdollisimman aikaisin.
+    def evaluate(self, board):
+        '''Arvioi suopuisia tilanteita.
         Korkeampi positiivinen arvo on hyvä Ai:lle'''
         score = 0
-        if board.checker("O"):
-            return 1000 + depth
-        if board.checker("X"):
-            return -1000 - depth
         score += self.three_in_a_row(board, "O") * 15
         score -= self.three_in_a_row(board, "X") * 15
         return score
@@ -92,14 +86,6 @@ class AI:
                     count += 1
         return count
 
-    def game_ended(self, board):
-        '''Katsoo onko jompikumpi voittanut tai onko lauta täynnä'''
-        return (
-            board.checker("X")
-            or board.checker("O")
-            or board.full()
-        )
-
     def best_move(self, board):
         '''Kutsuu minimaxia iteratiivisesti niin syvälle kun kerkeää 
         kunnes tulee aikakatkaisu ja palauttaa siihen asti saadun parhaan siirron'''
@@ -118,7 +104,8 @@ class AI:
                     float("inf"),
                     True,
                     start_time,
-                    time_limit
+                    time_limit, None, None, None
+
                 )
                 if move is not None:
                     best_col = move
@@ -127,7 +114,9 @@ class AI:
             depth += 1
         return best_col
 
-    def minimax(self, board, depth, alpha, beta, maximizing, start_time, time_limit):
+    def minimax(self, board, depth, alpha, beta, maximizing, start_time, time_limit, last_row,
+                last_col,
+                last_player):
         '''Valitsee AI-lle optimaalisen siirron pelaajaa vastaan.
         AI on maksimoiva pelaaja ja vastustaja on minimoiva.
         Alpha-beta pruning "leikkaa" pois ne vaihtoehdot,
@@ -140,14 +129,15 @@ class AI:
         maximizing: kertoo kumpi pelaaja pelaa'''
         if time.time() - start_time > time_limit:
             raise TimeoutError
-        if board.checker("O"):
-            return 1000 + depth, None
-        if board.checker("X"):
-            return -1000 - depth, None
+        if last_row is not None:
+            if board.checker(last_row, last_col, last_player):
+                if last_player == "O":
+                    return 1000 + depth, None
+                return -1000 - depth, None
         if board.full():
             return 0, None
         if depth == 0:
-            return self.evaluate(board, depth), None
+            return self.evaluate(board), None
         state = self.current_board_state(board)
 
         if maximizing:
@@ -155,16 +145,10 @@ class AI:
             best_move = None
             for move in self.possible_moves(board):
                 new_board = copy.deepcopy(board)
-                new_board.make_move(move, "O")
-                score, _ = self.minimax(
-                    new_board,
-                    depth - 1,
-                    alpha,
-                    beta,
-                    False,
-                    start_time,
-                    time_limit
-                )
+                row, col = new_board.make_move(move, "O")
+                score, _ = self.minimax(new_board, depth - 1, alpha, beta,
+                                        False, start_time, time_limit, row, col, "O"
+                                        )
                 if score > best_score:
                     best_score = score
                     best_move = move
@@ -178,16 +162,10 @@ class AI:
         best_move = None
         for move in self.possible_moves(board):
             new_board = copy.deepcopy(board)
-            new_board.make_move(move, "X")
-            score, _ = self.minimax(
-                new_board,
-                depth - 1,
-                alpha,
-                beta,
-                True,
-                start_time,
-                time_limit
-            )
+            row, col = new_board.make_move(move, "X")
+            score, _ = self.minimax(new_board, depth - 1, alpha,
+                                    beta, True, start_time, time_limit, row, col, "X"
+                                    )
             if score < best_score:
                 best_score = score
                 best_move = move
