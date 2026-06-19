@@ -30,61 +30,49 @@ class AI:
         return moves
 
     def evaluate(self, board):
-        '''Arvioi suopuisia tilanteita.
+        '''Heuristiikkafunktio arvioi suopuisia tilanteita 
+        neljän ikkunoiden avulla.
         Korkeampi positiivinen arvo on hyvä Ai:lle'''
         score = 0
-        score += self.three_in_a_row(board, "O") * 15
-        score -= self.three_in_a_row(board, "X") * 15
+        for row in range(6):
+            for col in range(7 - 3):
+                window = [board.grid[row][col + i] for i in range(4)]
+                score += self.evaluate_window(window, "O")
+                score -= self.evaluate_window(window, "X")
+        for col in range(7):
+            for row in range(6 - 3):
+                window = [board.grid[row + i][col] for i in range(4)]
+                score += self.evaluate_window(window, "O")
+                score -= self.evaluate_window(window, "X")
+        for row in range(6 - 3):
+            for col in range(7 - 3):
+                window = [board.grid[row + i][col + i] for i in range(4)]
+                score += self.evaluate_window(window, "O")
+                score -= self.evaluate_window(window, "X")
+        for row in range(3, 6):
+            for col in range(7 - 3):
+                window = [board.grid[row - i][col + i] for i in range(4)]
+                score += self.evaluate_window(window, "O")
+                score -= self.evaluate_window(window, "X")
         return score
 
-    def three_in_a_row(self, board, piece):
-        "Kertoo kuinka monta tilannetta, jossa on kolme nappulaa peräkkäin"
-        return (
-            self.three_row(board, piece) +
-            self.three_col(board, piece) +
-            self.three_diag_down(board, piece) +
-            self.three_diag_up(board, piece)
-        )
+    def evaluate_window(self, window, player):
+        '''Arvioi ikkunoiden tilanteita ja antaa sen mukaan pisteitä'''
+        opp = "X" if player == "O" else "O"
+        if player in window and opp in window:
+            return 0
 
-    def three_row(self, board, piece):
-        count = 0
-        for row in board.grid:
-            for col in range(7 - 2):
-                if (row[col] == piece and
-                    row[col+1] == piece and
-                        row[col+2] == piece):
-                    count += 1
-        return count
-
-    def three_col(self, board, piece):
-        count = 0
-        for col in range(7):
-            for row in range(6 - 2):
-                if (board.grid[row][col] == piece and
-                    board.grid[row+1][col] == piece and
-                        board.grid[row+2][col] == piece):
-                    count += 1
-        return count
-
-    def three_diag_down(self, board, piece):
-        count = 0
-        for row in range(6 - 2):
-            for col in range(7 - 2):
-                if (board.grid[row][col] == piece and
-                    board.grid[row+1][col+1] == piece and
-                        board.grid[row+2][col+2] == piece):
-                    count += 1
-        return count
-
-    def three_diag_up(self, board, piece):
-        count = 0
-        for row in range(2, 6):
-            for col in range(7 - 2):
-                if (board.grid[row][col] == piece and
-                    board.grid[row-1][col+1] == piece and
-                        board.grid[row-2][col+2] == piece):
-                    count += 1
-        return count
+        if window.count(player) == 4:
+            return 1000
+        if window.count(player) == 3 and window.count(0) == 1:
+            return 50
+        if window.count(player) == 2 and window.count(0) == 2:
+            return 10
+        if window.count(opp) == 3 and window.count(0) == 1:
+            return -70
+        if window.count(opp) == 2 and window.count(0) == 2:
+            return -10
+        return 0
 
     def best_move(self, board):
         '''Kutsuu minimaxia iteratiivisesti niin syvälle kun kerkeää 
@@ -105,7 +93,6 @@ class AI:
                     True,
                     start_time,
                     time_limit, None, None, None
-
                 )
                 if move is not None:
                     best_col = move

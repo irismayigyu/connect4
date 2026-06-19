@@ -20,16 +20,6 @@ class TestAI(unittest.TestCase):
         self.assertEqual(self.ai.possible_moves(
             self.matrix), [3, 4, 1, 5, 0])
 
-    def test_three_in_a_row(self):
-        self.matrix.grid = [[0, 0, "O", 0, 0, 0, "O"],
-                            [0, 0, "O", 0, 0, 0, "O"],
-                            [0, 0, "X", 0, 0, 0, "O"],
-                            ["O", 0, "X", 0, 0, 0, "X"],
-                            ["O", 0, "O", 0, 0, 0, "X"],
-                            ["O", "O", "O", "X", 0, 0, "X"]]
-        self.assertEqual(self.ai.three_in_a_row(
-            self.matrix, "O"), 3)
-
     def test_evaluate(self):
 
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
@@ -39,7 +29,7 @@ class TestAI(unittest.TestCase):
                             ["O", "X", "O", "O", 0, "O", 0],
                             ["X", 0, "X", "O", 0, 0, "O"]]
         self.assertEqual(self.ai.evaluate(
-            self.matrix), 10)
+            self.matrix), 220)
 
         self.matrix.grid = [[0, 0, "O", 0, 0, 0, "O"],
                             [0, 0, "O", 0, 0, 0, "O"],
@@ -48,16 +38,7 @@ class TestAI(unittest.TestCase):
                             ["O", 0, "O", 0, 0, 0, "X"],
                             ["O", "O", "O", "O", 0, 0, "X"]]
         self.assertEqual(self.ai.evaluate(
-            self.matrix), 1001)
-
-        self.matrix.grid = [[0, 0, "O", 0, 0, 0, 0],
-                            [0, 0, "O", 0, 0, 0, 0],
-                            [0, 0, "X", 0, 0, 0, 0],
-                            ["O", 0, "X", 0, 0, 0, 0],
-                            ["O", 0, "O", "X", 0, 0, 0],
-                            ["X", "X", "X", "X", 0, 0, 0]]
-        self.assertEqual(self.ai.evaluate(
-            self.matrix), -1001)
+            self.matrix), 1380)
 
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
                             [0, 0, "X", 0, 0, 0, 0],
@@ -66,7 +47,15 @@ class TestAI(unittest.TestCase):
                             ["O", "X", "O", "X", 0, 0, 0],
                             ["X", "X", "X", 0, "X", 0, 0]]
         self.assertEqual(self.ai.evaluate(
-            self.matrix), -500)
+            self.matrix), -680)
+
+    def test_three_in_row_window(self):
+        window = ["O", "O", "O", 0]
+        self.assertEqual(self.ai.evaluate_window(window, "O"), 50)
+
+    def test_blocked_window(self):
+        window = ["O", "O", "X", 0]
+        self.assertEqual(self.ai.evaluate_window(window, "O"), 0)
 
     def test_best_move(self):
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
