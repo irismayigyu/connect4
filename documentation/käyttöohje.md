@@ -14,3 +14,13 @@ poetry install
 ```bash
 poetry run python main.py
 ```
+
+tai juurikansiossa komennolla 
+```bash
+poetry run invoke start
+```
+
+Coverage report ja testit:
+```bash
+poetry run invoke coverage-report
+```

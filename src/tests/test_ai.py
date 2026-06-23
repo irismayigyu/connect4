@@ -63,7 +63,7 @@ class TestAI(unittest.TestCase):
                             [0, 0, "X", 0, 0, 0, 0],
                             ["O", 0, "X", 0, 0, 0, 0],
                             ["O", 0, "O", 0, 0, 0, 0],
-                            ["o", "X", "X", "X", 0, 0, 0]]
+                            ["O", "X", "X", "X", 0, 0, 0]]
         self.assertEqual(self.ai.best_move(self.matrix), 4)
 
     def test_best_move_middle_start(self):
@@ -86,7 +86,7 @@ class TestAI(unittest.TestCase):
         move = self.ai.best_move(self.matrix)
         self.assertEqual(move, 0)
 
-    def test_player_and_ai_turn(self):
+    def test_player_and_ai_turns_works(self):
         self.matrix.initialize_game()
         self.matrix.make_move(3, "X")
         ai_move = self.ai.best_move(self.matrix)
@@ -98,6 +98,13 @@ class TestAI(unittest.TestCase):
         )
         self.assertEqual(moves, 2)
 
+    def test_best_move_goes_first(self):
+        self.matrix.initialize_game()
+        state = self.ai.current_board_state(self.matrix)
+        self.ai.best_moves[state] = 2
+        moves = self.ai.possible_moves(self.matrix)
+        self.assertEqual(moves[0], 2)
+
     def test_cannot_make_move_into_full_column(self):
         self.matrix.grid = [[0, 0, 0, "O", 0, 0, 0],
                             [0, 0, 0, "O", 0, 0, 0],
@@ -105,9 +112,11 @@ class TestAI(unittest.TestCase):
                             [0, 0, 0, "O", 0, 0, 0],
                             [0, 0, 0, "O", 0, 0, 0],
                             [0, 0, 0, "O", 0, 0, 0]]
-        self.assertFalse(
-            self.matrix.make_move(3, "X")
-        )
+        state = self.ai.current_board_state(self.matrix)
+        self.ai.best_moves[state] = 3
+        moves = self.ai.possible_moves(self.matrix)
+        self.assertFalse(self.matrix.make_move(3, "X"))
+        self.assertNotIn(3, moves)
 
     def test_current_board_state_changes(self):
         self.matrix.grid = [[0, 0, 0, "O", 0, 0, 0],

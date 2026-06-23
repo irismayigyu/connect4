@@ -91,7 +91,7 @@ class TestMatrix(unittest.TestCase):
                                             [0, 0, 0, 0, 0, "O", 0],
                                             [0, 0, 0, 0, 0, "X", "X"]])
 
-    def test_make_move_false(self):
+    def test_make_move_none(self):
         self.matrix.grid = [["X", "X", "X", 0, "X", "X", "X"],
                             ["X", "X", "X", "X", "X", "X", "X"],
                             ["X", "X", "X", "X", "X", "X", "X"],

@@ -9,7 +9,5 @@ Testikattavuusraportin saa komennolla (ajaa myös testit)
 poetry run invoke coverage-report
 ```
 
-Heuristiikkafunktiota on testattu muutamassa eri tilanteessa, jotta se pisteyttää pelitilanteet oikein.
-
-Sovelluslogiikan ja tekoälyn funktiot on testattu yksikkötesteillä sekä testattu molempien luokkien eri funktioita samassa testissa. Minimaxia tulee testata kattavemmin erilaisissa tilanteissa. 
+Sovelluslogiikan ja tekoälyn funktiot on testattu yksikkötesteillä sekä molempien luokkien yhteistoimintaa on myös testattu. Heuristiikkafunktiota on testattu muutamassa eri tilanteessa, tarkistaakseen että se pisteyttää pelitilanteet oikein.
 

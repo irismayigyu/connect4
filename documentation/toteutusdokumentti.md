@@ -15,13 +15,11 @@
 
 - Tilavaativuus: O(nm), jossa n: mahdollisten siirtojen määrä ja m: kuinka monta siirtoa eteenpäin lasketaan (syvyys). 
 
-Pelissä käytetään maksimisyvyyttä 6. Korkeammilla syvyyksillä peli alkaa hidastua huomattavasti.
+Pelissä käytetään aikakatkasua, jossa se laskee pelitilanteita niin syvälle kun kerkeää yhdessä sekunnissa.
 
 ### Jatkokehitysideoita
 
 - UI:n parantelu esim ohjeet screenille eikä vaan READ.MEhen. 
-
-- Tekoälyn tehokkuuden parantelu niin, että syvyyttä voisi lisätä.
 
 ### Laajojen kielimallien käyttö:
 
