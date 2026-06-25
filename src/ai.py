@@ -38,22 +38,18 @@ class AI:
             for col in range(7 - 3):
                 window = [board.grid[row][col + i] for i in range(4)]
                 score += self.evaluate_window(window, "O")
-                score -= self.evaluate_window(window, "X")
         for col in range(7):
             for row in range(6 - 3):
                 window = [board.grid[row + i][col] for i in range(4)]
                 score += self.evaluate_window(window, "O")
-                score -= self.evaluate_window(window, "X")
         for row in range(6 - 3):
             for col in range(7 - 3):
                 window = [board.grid[row + i][col + i] for i in range(4)]
                 score += self.evaluate_window(window, "O")
-                score -= self.evaluate_window(window, "X")
         for row in range(3, 6):
             for col in range(7 - 3):
                 window = [board.grid[row - i][col + i] for i in range(4)]
                 score += self.evaluate_window(window, "O")
-                score -= self.evaluate_window(window, "X")
         return score
 
     def evaluate_window(self, window, player):
@@ -61,9 +57,6 @@ class AI:
         opp = "X" if player == "O" else "O"
         if player in window and opp in window:
             return 0
-
-        if window.count(player) == 4:
-            return 1000
         if window.count(player) == 3 and window.count(0) == 1:
             return 50
         if window.count(player) == 2 and window.count(0) == 2:
@@ -94,9 +87,14 @@ class AI:
                     start_time,
                     time_limit, None, None, None
                 )
+                print(
+                    f"Depth {depth}: best move={move}, score={score}"
+                )
                 if move is not None:
                     best_col = move
+
             except TimeoutError:
+                print(f"Timeout at depth {depth}")
                 break
             depth += 1
         return best_col

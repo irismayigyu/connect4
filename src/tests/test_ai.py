@@ -1,6 +1,7 @@
 import unittest
 from services.matrix import Matrix
 from ai import AI
+import time
 
 
 class TestAI(unittest.TestCase):
@@ -25,29 +26,29 @@ class TestAI(unittest.TestCase):
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0],
                             [0, 0, "X", 0, 0, 0, 0],
-                            ["O", 0, "X", 0, "O", 0, 0],
-                            ["O", "X", "O", "O", 0, "O", 0],
-                            ["X", 0, "X", "O", 0, 0, "O"]]
+                            ["O", 0, "X", 0, 0, 0, 0],
+                            ["O", 0, "O", "O", 0, 0, 0],
+                            ["X", 0, "X", "O", 0, "O", "O"]]
         self.assertEqual(self.ai.evaluate(
-            self.matrix), 220)
+            self.matrix), 130)
 
         self.matrix.grid = [[0, 0, "O", 0, 0, 0, "O"],
                             [0, 0, "O", 0, 0, 0, "O"],
                             [0, 0, "X", 0, 0, 0, "O"],
                             ["O", 0, "X", 0, 0, 0, "X"],
                             ["O", 0, "O", 0, 0, 0, "X"],
-                            ["O", "O", "O", "O", 0, 0, "X"]]
+                            ["O", "O", "O", 0, 0, 0, "X"]]
         self.assertEqual(self.ai.evaluate(
-            self.matrix), 1380)
+            self.matrix), 150)
 
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
                             [0, 0, "X", 0, 0, 0, 0],
                             [0, 0, "X", 0, 0, 0, 0],
                             ["O", 0, "X", 0, 0, 0, 0],
-                            ["O", "X", "O", "X", 0, 0, 0],
+                            ["O", "X", "O", 0, 0, 0, 0],
                             ["X", "X", "X", 0, "X", 0, 0]]
         self.assertEqual(self.ai.evaluate(
-            self.matrix), -680)
+            self.matrix), -310)
 
     def test_three_in_row_window(self):
         window = ["O", "O", "O", 0]
@@ -64,7 +65,7 @@ class TestAI(unittest.TestCase):
                             ["O", 0, "X", 0, 0, 0, 0],
                             ["O", 0, "O", 0, 0, 0, 0],
                             ["O", "X", "X", "X", 0, 0, 0]]
-        self.assertEqual(self.ai.best_move(self.matrix), 4)
+        self.assertEqual(self.ai.best_move(self.matrix), 0)
 
     def test_best_move_middle_start(self):
         self.matrix.initialize_game()
@@ -139,3 +140,62 @@ class TestAI(unittest.TestCase):
                             [0, 0, 0, "O", 0, 0, 0]]
         moves = self.ai.possible_moves(self.matrix)
         self.assertNotIn(3, moves)
+
+    def test_minimax_finds_win_depth_1(self):
+        self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            ["X", 0, 0, "O", "O", "O", "X"]]
+        score, move = self.ai.minimax(
+            self.matrix,
+            5,
+            -float("inf"),
+            float("inf"),
+            True,
+            time.time(),
+            100,
+            None, None, None
+        )
+        self.assertEqual(move, 2)
+        self.assertEqual(score, 1004)
+
+    def test_minimax_finds_win_depth_3(self):
+        self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            ["X", 0, 0, "O", 0, 0, "X"],
+                            ["X", 0, 0, "O", "O", 0, "X"]]
+        score, move = self.ai.minimax(
+            self.matrix,
+            5,
+            -float("inf"),
+            float("inf"),
+            True,
+            time.time(),
+            100,
+            None, None, None
+        )
+        self.assertEqual(move, 2)
+        self.assertGreaterEqual(score, 1002)
+
+    def test_minimax_doesnt_find_win_with_lower_depth(self):
+        self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0],
+                            ["X", 0, 0, "O", 0, 0, "X"],
+                            ["X", 0, 0, "O", "O", 0, "X"]]
+        score2, move2 = self.ai.minimax(
+            self.matrix,
+            2,
+            -float("inf"),
+            float("inf"),
+            True,
+            time.time(),
+            100,
+            None, None, None
+        )
+        self.assertLess(score2, 1000)
