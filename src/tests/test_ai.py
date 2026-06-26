@@ -1,7 +1,7 @@
-import unittest
-from services.matrix import Matrix
-from ai import AI
 import time
+import unittest
+from ai.ai import AI
+from services.matrix import Matrix
 
 
 class TestAI(unittest.TestCase):

@@ -1,5 +1,5 @@
 import pygame
-from ai import AI
+from ai.ai import AI
 
 
 class Gameview:
