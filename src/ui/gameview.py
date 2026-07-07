@@ -10,12 +10,13 @@ class Gameview:
 
         Args:
         matrix: peliruudukko, Matrix-luokan olio
-        gap: ruudukon ruutujen välissä oleva väli
         ai: AI-luokan olio
+        gap: ruudukon ruutujen välissä oleva väli
+        cell_size: ruudukon ympyröiden koko
         '''
         self.matrix = matrix
         self.ai = AI()
-        self.font = pygame.font.SysFont("Comic Sans", 17)
+        self.font = pygame.font.SysFont("Arial", 30)
         self.screen = screen
         self.cell_size = 90
         self.gap = 3
@@ -38,7 +39,6 @@ class Gameview:
                     x = event.pos[0]
                     col = (x - 20) // (self.cell_size + self.gap)
                     if 0 <= col <= 6:
-                        # if self.matrix.make_move(col, "X"):
                         row, col = self.matrix.make_move(col, "X")
                         if self.matrix.checker(row, col, "X"):
                             self.winner = "X"
@@ -73,7 +73,7 @@ class Gameview:
         else:
             winner_message = self.font.render(
                 f"{player} has won!", True, (0, 0, 0))
-        self.screen.blit(winner_message, (34, 160))
+        self.screen.blit(winner_message, (200, 160))
 
     def draw_circles(self):
         for row in range(6):

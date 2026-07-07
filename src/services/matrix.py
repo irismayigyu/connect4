@@ -14,7 +14,6 @@ class Matrix:
 
         initialize_game(): funktio alustaa tyhjän matriisin
         '''
-
         self.player = "X"
         self.game_over = False
         self.game_won = False
@@ -51,7 +50,7 @@ class Matrix:
         return False
 
     def row_check(self, row, col, player):
-        '''Tarkistaa onko voittorivejä viimeisimmän nappulan vasemmalta (prev) 
+        '''Tarkistaa onko voittorivejä viimeisimmän pelatun nappulan vasemmalta (prev) 
         ja oikealta puolelta (next).
         Jos löytyyy neljä peräkkäistä palauttaa True'''
         count = 1
