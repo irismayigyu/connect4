@@ -87,14 +87,10 @@ class AI:
                     start_time,
                     time_limit, None, None, None
                 )
-                print(
-                    f"Depth {depth}: best move={move}, score={score}"
-                )
                 if move is not None:
                     best_col = move
 
             except TimeoutError:
-                print(f"Timeout at depth {depth}")
                 break
             depth += 1
         return best_col

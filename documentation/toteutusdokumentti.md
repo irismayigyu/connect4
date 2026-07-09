@@ -15,7 +15,7 @@
 
 - Tilavaativuus: O(nm), jossa n: mahdollisten siirtojen määrä ja m: kuinka monta siirtoa eteenpäin lasketaan (syvyys). 
 
-Pelissä käytetään aikakatkasua, jossa se laskee pelitilanteita niin syvälle kun kerkeää yhdessä sekunnissa. Manuaalitestauksessa matalin syvyys oli 6 (pelin alussa) ja syvin on väh 42 (vasta pelin loppupuolella kun vaihtoehtoisia siirtoja on vähemmän ja karsimista on saatu tehtyä).
+Pelissä käytetään aikakatkaisua, jossa se laskee pelitilanteita niin syvälle kun kerkeää yhdessä sekunnissa. Manuaalitestauksessa matalin syvyys oli 6 (pelin alussa) ja syvin on väh 42 (vasta pelin loppupuolella kun vaihtoehtoisia siirtoja on vähemmän ja karsimista on saatu tehtyä).
 
 ### Jatkokehitysideoita
 
