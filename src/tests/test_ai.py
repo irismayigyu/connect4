@@ -183,11 +183,11 @@ class TestAI(unittest.TestCase):
 
     def test_minimax_finds_win_5(self):
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, "X", 0, 0, 0],
-                            [0, "X", 0, "O", 0, 0, 0],
-                            ["O", "O", 0, "O", 0, 0, 0],
-                            ["X", "X", "O", "O", 0, 0, "X"],
-                            ["X", "X", "O", "X", "O", "O", "X"]]
+                            [0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, "X", "X", 0, 0, 0],
+                            [0, 0, "O", "O", 0, 0, 0],
+                            ["X", 0, "O", "O", "O", 0, "X"],
+                            ["X", 0, "O", "O", "X", 0, "X"]]
         score, move = self.ai.minimax(
             self.matrix,
             5,
@@ -198,7 +198,7 @@ class TestAI(unittest.TestCase):
             100,
             None, None, None
         )
-        self.assertEqual(score, 1004)
+        self.assertEqual(score, 1000)
 
     def test_minimax_doesnt_find_win_with_shorter_depth(self):
         self.matrix.grid = [[0, 0, 0, 0, 0, 0, 0],
